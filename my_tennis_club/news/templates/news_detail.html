@@ -1,0 +1,15 @@
+{% extends "master.html" %}
+
+{% block content %}
+<section class="space-y-6 bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-gray-800 text-4xl font-bold tracking-wide mb-2">{{ news_item.title }}</h1>
+
+    <div class="text-sm text-gray-500 mb-4">Published on: {{ news_item.published_date|date:"F d, Y" }}</div>
+
+    <p class="text-gray-600 leading-relaxed">{{ news_item.content }}</p>
+
+    <div class="mt-8">
+        <a href="{% url 'news_list' %}" class="text-blue-500 hover:text-blue-600 hover:underline transition duration-200">← Back to News List</a>
+    </div>
+</section>
+{% endblock %}

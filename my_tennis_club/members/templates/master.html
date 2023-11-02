@@ -1,0 +1,48 @@
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+</head>
+
+<body class="bg-gray-100 font-sans antialiased">
+
+<!-- Header -->
+<header class="bg-transparent border-b border-gray-200 py-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="/" class="text-gray-800 text-3xl font-extrabold tracking-wide transform hover:scale-105 transition-transform duration-200">Tennis Club</a>
+
+            <nav class="hidden md:flex">
+                <ul class="flex space-x-6 items-center">
+                    <li><a href="/" class="text-gray-600 hover:text-blue-500 transition-colors duration-200">Home</a></li>
+                    <li><a href="/members" class="text-gray-600 hover:text-blue-500 transition-colors duration-200">Members</a></li>
+                    <li><a href="/news" class="text-gray-600 hover:text-blue-500 transition-colors duration-200">News</a></li>
+                    <li><a href="/booking" class="text-gray-600 hover:text-blue-500 transition-colors duration-200">Bookings</a></li>
+
+                    {% if user.is_authenticated %}
+                        <li><span class="text-gray-600 mr-4">Hello, {{ user.first_name }}</span></li>
+                        <li><a href="{% url 'logout' %}" class="py-2 px-4 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition-colors duration-200">Logout</a></li>
+                    {% else %}
+                        <li><a href="/register" class="py-2 px-4 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-colors duration-200">Join</a></li>
+                        <li><a href="{% url 'login' %}" class="py-2 px-4 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition-colors duration-200">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+    </div>
+</header>
+
+<main class="container mx-auto mt-16 px-4 md:px-0">
+    {% block content %}
+    {% endblock %}
+</main>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% extends "master.html" %}
+
+{% block title %}
+  My Tennis Club - List of all members
+{% endblock %}
+
+{% block content %}
+<section class="space-y-6 bg-white p-6 rounded-lg shadow-md">
+    <div class="flex justify-between items-center">
+        <h1 class="text-gray-800 text-3xl font-bold tracking-wide">Members</h1>
+        <a href="/" class="text-blue-500 hover:text-blue-600 hover:underline transition duration-200">HOME</a>
+    </div>
+
+    <ul class="divide-y divide-gray-200">
+        {% for member in members %}
+        <li class="py-2">
+            <a href="{% url 'details' member.id %}" class="text-lg text-gray-600 hover:text-blue-500 transition duration-200">{{ member.first_name }} {{ member.last_name }}</a>
+        </li>
+        {% empty %}
+        <li class="py-2">
+            No members registered yet.
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}

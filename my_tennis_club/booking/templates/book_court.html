@@ -1,0 +1,21 @@
+{% extends 'master.html' %}
+
+{% block content %}
+    <h2>Book a Tennis Court</h2>
+    {{ form.media }}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Book</button>
+    </form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr(".datetimepicker", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i:S"
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'master.html' %}
+
+{% block content %}
+    <h2>Booked Courts</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Court Name</th>
+                <th>Booked By</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.court.name }}</td>
+                <td>{{ booking.user.username }}</td>
+                <td>{{ booking.start_time }}</td>
+                <td>{{ booking.end_time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table><br>
+    <a href="./book" class="py-2 px-4 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-colors duration-200">Book a court</a>
+{% endblock %}
