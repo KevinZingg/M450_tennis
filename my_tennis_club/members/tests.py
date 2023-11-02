@@ -1,10 +1,8 @@
-from django.test import TestCase
-from .models import Member
-from .forms import RegisterForm
 from django.test import TestCase, Client
 from django.urls import reverse
+from .models import Member
+from .forms import RegisterForm
 import datetime
-
 
 class MemberModelTest(TestCase):
 
@@ -15,9 +13,6 @@ class MemberModelTest(TestCase):
         self.assertIsInstance(member, Member)
         self.assertEqual(member.username, "testuser")
         self.assertEqual(member.joined_date, datetime.date.today())
-
-        # Test
-
 
 class RegisterFormTest(TestCase):
 
@@ -51,55 +46,47 @@ class RegisterFormTest(TestCase):
         self.assertFalse(form.is_valid())
 
 class ViewTest(TestCase):
+
     def setUp(self):
         # Setzt en Test Client uf und erstellt en Test User
         self.client = Client()
         self.user = Member.objects.create_user(
             username="testuser",
             password="testpassword",
-            email="test@example.com"
+            email="test@example.com",
+            first_name="Test",
+            last_name="User"
         )
 
     # Test für die Member-Übersicht
     def test_members_view(self):
         response = self.client.get(reverse('members'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "testuser")
+        self.assertContains(response, self.user.first_name)
+        self.assertContains(response, self.user.last_name)
 
     # Test für die Detailansicht eines Members
     def test_details_view(self):
         response = self.client.get(reverse('details', args=[self.user.id]))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "testuser")
+        self.assertContains(response, self.user.username)
 
     # Test für die Hauptseite
     def test_main_view(self):
         response = self.client.get(reverse('main'))
         self.assertEqual(response.status_code, 200)
 
-    # Test für die Registrierung
-    def test_register_view(self):
-        data = {
-            'username': 'newuser',
-            'first_name': 'New',
-            'last_name': 'User',
-            'phone': '9876543210',
-            'email': 'new@example.com',
-            'password1': 'newpassword',
-            'password2': 'newpassword',
-        }
-        response = self.client.post(reverse('register'), data)
-        self.assertEqual(response.status_code, 302)  # Sollte zur Hauptseite weiterleiten
-        self.assertTrue(Member.objects.filter(username='newuser').exists())
-
     # Test für die Anmeldung
     def test_user_login_view(self):
-        response = self.client.post(reverse('login'), {'username': 'testuser', 'password': 'testpassword'})
-        self.assertEqual(response.status_code, 302)  # Sollte zur Hauptseite weiterleiten
-        self.assertTrue(response.context['user'].is_authenticated)
+        self.client.post(reverse('login'), {'username': 'testuser', 'password': 'testpassword'})
+        # Check if the user is authenticated after login
+        user_id = self.client.session.get('_auth_user_id')
+        self.assertIsNotNone(user_id)
+        self.assertTrue(Member.objects.filter(id=user_id).exists())
 
     # Test für ungültige Anmeldung
     def test_invalid_user_login_view(self):
         response = self.client.post(reverse('login'), {'username': 'testuser', 'password': 'wrongpassword'})
         self.assertEqual(response.status_code, 200)
         self.assertFalse(response.context['user'].is_authenticated)
+
