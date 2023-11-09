@@ -23,9 +23,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Change to the my_tennis_club Directory
-      run: cd my_tennis_club
-
     - name: Run Tests
       run: |
         python manage.py test
+      working-directory: ./my_tennis_club
